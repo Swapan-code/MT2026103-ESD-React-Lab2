@@ -9,6 +9,7 @@
 import { useState } from "react";
 import { useCourseSearch } from "./useCourseSearch.js";
 import { SearchResults } from "./SearchResults.jsx";
+import { useDebounced } from "./useDebounced.js";
 
 export function CourseSearch() {
   const [query, setQuery] = useState("");
