@@ -1,10 +1,20 @@
-// Lab day (AI required): the Courses page — list + add. src/App.jsx renders it.
-// You generate it with AI from CONTRACT.md, then audit and fix it (doc sections 10–14).
+import { CoursesView } from "./CoursesView.jsx";
+import { useCourses } from "./useCourses.js";
+
 export function CoursesPage() {
+  const state = useCourses();
+
   return (
-    <section className="courses-page">
-      <h1>Courses</h1>
-      <p className="todo">Built in the lab, with AI — see CONTRACT.md.</p>
-    </section>
+    <CoursesView
+      courses={state.courses}
+      loading={state.loading}
+      loadError={state.loadError}
+      values={state.values}
+      submitting={state.submitting}
+      submitError={state.submitError}
+      fieldErrors={state.fieldErrors}
+      onChangeField={state.changeField}
+      onSubmit={state.submit}
+    />
   );
 }
