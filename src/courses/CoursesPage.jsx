@@ -1,20 +1,15 @@
+import { AddCourseForm } from "./AddCourseForm.jsx";
 import { CoursesView } from "./CoursesView.jsx";
 import { useCourses } from "./useCourses.js";
 
 export function CoursesPage() {
-  const state = useCourses();
+  const { courses, status, error, addCourse } = useCourses();
 
   return (
-    <CoursesView
-      courses={state.courses}
-      loading={state.loading}
-      loadError={state.loadError}
-      values={state.values}
-      submitting={state.submitting}
-      submitError={state.submitError}
-      fieldErrors={state.fieldErrors}
-      onChangeField={state.changeField}
-      onSubmit={state.submit}
-    />
+    <main>
+      <h1>Courses</h1>
+      <CoursesView courses={courses} status={status} error={error} />
+      <AddCourseForm onAdd={addCourse} />
+    </main>
   );
 }
