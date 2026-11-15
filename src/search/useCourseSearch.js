@@ -16,5 +16,30 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "../api/client.js";
 
 export function useCourseSearch(query) {
-  throw new Error("TODO");
+  const [results, setResults] = useState([]);
+  const [status, setStatus] = useState("idle");
+  const q = query.trim();
+
+  useEffect(() => {
+    if (q === "") return; // nothing to search for: no request, nothing to clean up
+    let ignore = false;
+    setStatus("loading");
+    apiFetch(`/api/courses?${new URLSearchParams({ q })}`)
+      .then((courses) => {
+        if (ignore) return;
+        setResults(courses);
+        setStatus("ready");
+      })
+      .catch(() => {
+        if (ignore) return;
+        setStatus("error");
+      });
+    return () => {
+      ignore = true; // a newer query started, or the component went away
+    };
+  }, [q]);
+
+  // Hooks are all called above; decisions come after.
+  if (q === "") return { results: [], status: "idle" };
+  return { results, status };
 }
