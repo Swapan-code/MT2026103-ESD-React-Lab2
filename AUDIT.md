@@ -133,16 +133,16 @@ useReducer, useRef, or context."
 
 ## 6. Before / after
 
-|                              | Before (the AI's first version)                                                        | After (yours) |
-| ---------------------------- | -------------------------------------------------------------------------------------- | ------------- |
-| Files and components         | 3 files: `CoursesPage`, `CoursesView` (list + form), inner `CourseList`, plus the hook |               |
-| `useState` calls (and where) | 7, all in `useCourses.js` (`:35`, `:36`, `:37`, `:39`, `:40`, `:41`, `:42`)            |               |
-| `useEffect` calls            | 1 (`useCourses.js:44`)                                                                 |               |
-| "Not yet" items              | 0                                                                                      |               |
-| Requests: on load / per add  | 2 (StrictMode) / 1                                                                     |               |
-| `npm test`                   | 31 passed / 31 failed                                                                  |               |
+|                              | Before (the AI's first version)                                                        | After (yours)                                                                                                                                                                                                    |
+| ---------------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Files and components         | 3 files: `CoursesPage`, `CoursesView` (list + form), inner `CourseList`, plus the hook | 4 files: `useCourses.js` (43 lines), `CoursesView.jsx` (27), `AddCourseForm.jsx` (93), `CoursesPage.jsx` (15); 3 components (`CoursesPage`, `CoursesView`, `AddCourseForm`) plus the hook; no inner `CourseList` |
+| `useState` calls (and where) | 7, all in `useCourses.js` (`:35`, `:36`, `:37`, `:39`, `:40`, `:41`, `:42`)            | 6: 3 in `useCourses.js` (`courses`, `status`, `error`) and 3 in `AddCourseForm.jsx` (`values`, `submitting`, `error`)                                                                                            |
+| `useEffect` calls            | 1 (`useCourses.js:44`)                                                                 | 1 (in `useCourses.js`, with `[]` and an `ignore` cleanup)                                                                                                                                                        |
+| "Not yet" items              | 0                                                                                      | 0                                                                                                                                                                                                                |
+| Requests: on load / per add  | 2 (StrictMode) / 1                                                                     | 2 (StrictMode) / 1 (unchanged: the same effect, and the 201 body is still inserted with no reload)                                                                                                               |
+| `npm test`                   | 31 passed / 31 failed                                                                  | 62 passed / 0 failed (stretch: 4 passed)                                                                                                                                                                         |
 
 ## 7. Two sentences
 
-- One thing the AI got right that you might not have thought of:
-- One thing you will never accept from an AI without checking again:
+- One thing the AI got right that you might not have thought of: The AI's first version already inserted the 201 response into a new sorted array instead of reloading the whole list after an add, and it had an `ignore` flag in the effect cleanup, so the page made only one POST per add and a stale answer from StrictMode's second effect run was dropped.
+- One thing you will never accept from an AI without checking again: A draft that passes its end-to-end test can still have the wrong shape, because the first version passed all 4 `CoursesPage` tests while the form's state sat in the page hook and the form was inside the View, even though prompt 1 said the View only renders, so I will always audit the structure and not just run the app.
