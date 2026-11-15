@@ -10,5 +10,12 @@
 import { useEffect, useState } from "react";
 
 export function useDebounced(value, ms) {
-  throw new Error("TODO");
+  const [settled, setSettled] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSettled(value), ms);
+    return () => clearTimeout(timer); // the value changed again: start the wait over
+  }, [value, ms]);
+
+  return settled;
 }
